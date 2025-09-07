@@ -1,8 +1,57 @@
-import { Link, useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import style from "../style.module.css";
+import  Axios  from "axios";
+import Swal from "sweetalert2";
+import { useEffect, useState } from "react";
 
 const Users = () => {
+  const [users,setUsers]=useState([])
   const Navigate = useNavigate()
+  useEffect(() => {
+    Axios.get('https://jsonplaceholder.typicode.com/users').then(res=>{
+      setUsers(res.data)
+    }).catch(err=>{
+      console.log(err);
+    })
+  }, []);
+
+
+
+
+  const handelDelete = (itemId) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "bg-black rounded-sm  p-3 text-white ml-[2vh]",
+        cancelButton: "bg-red-600 rounded-sm  p-3 text-white"
+      },
+      buttonsStyling: false
+    });
+    swalWithBootstrapButtons.fire({
+      title: `ایا از حذف ${itemId} اطمینا دارید`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it",
+      cancelButtonText: "No, cancel",
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        swalWithBootstrapButtons.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success"
+        });
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire({
+          title: "Cancelled",
+          text: "Your imaginary file is safe :)",
+          icon: "error"
+        });
+      }
+    });
+  }
   return (
     <div className={`${style.item_content} mt-5 p-4 w-full max-w-none`}>
       <h4 className="text-center">مدریت کاربران</h4>
@@ -12,9 +61,9 @@ const Users = () => {
         {/* دکمه */}
         <div className="w-full sm:w-auto mb-2 sm:mb-0">
           <Link to="/users/add">
-          <button className="px-4 py-2 cursor-pointer hover:bg-gray-950 rounded-md bg-black text-white focus:outline-none focus:ring-2">
-            <i className="fas fa-plus text-white"></i>
-          </button>
+            <button className="px-4 py-2 cursor-pointer hover:bg-gray-950 rounded-md bg-black text-white focus:outline-none focus:ring-2">
+              <i className="fas fa-plus text-white"></i>
+            </button>
           </Link>
         </div>
 
@@ -27,11 +76,10 @@ const Users = () => {
           />
         </div>
       </div>
-
-      {/* جدول کاربران */}
-      <table className="w-full inset-shadow-sm shadow divide-y h-[7vh]">
+        {users.length ?(
+        <table className="w-full  border-separate  border-spacing-y-[2.5vh] inset-shadow-sm shadow h-[7vh]">
         <thead>
-          <tr>
+          <tr className="divide-y">
             <th>عملیات</th>
             <th>ایمیل</th>
             <th>نام کاربری</th>
@@ -40,19 +88,25 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          <tr>
+          {users.map(u=>(
+            <tr className="divide-y">
             <td>
-              <i className="fas fa-trash text-red-600 mx-2 cursor-pointer"></i>
-              
-              <i onClick={()=>{Navigate("/users/add/2")}} className="fas fa-edit text-yellow-500 mx-2 cursor-pointer"></i>
+              <i onClick={() => handelDelete(1)} className="fas fa-trash text-red-600 mx-2 cursor-pointer"></i>
+              <i onClick={() => Navigate("/users/add/2", { state: "react" })} className="fas fa-edit text-yellow-500 mx-2 cursor-pointer"></i>
             </td>
-            <td>mohammadkazemfarahbakhsh5@gmail.com</td>
-            <td>mohammad kazem</td>
-            <td>careless</td>
-            <td>1</td>
+            <td>{u.email}</td>
+            <td>{u.username}</td>
+            <td>{u.name}</td>
+            <td>{u.id}</td>
           </tr>
+          ))}
         </tbody>
       </table>
+        ): (
+          <h4 className="text-center text-black">لطفا صبر کنید ...</h4>
+        )}
+      
+
     </div>
   );
 };

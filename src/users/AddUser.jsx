@@ -1,7 +1,10 @@
-import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
 
 const AddUser = () => {
     const {userId} = useParams()
+    const param=useLocation()
+    console.log(param);
+    
     const navigate=useNavigate()
   return (
     <div className="mt-5 p-4 w-full">
