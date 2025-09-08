@@ -3,6 +3,7 @@ import style from "../style.module.css";
 import  Axios  from "axios";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 const Users = () => {
   const [users,setUsers]=useState([])
@@ -35,13 +36,28 @@ const Users = () => {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        swalWithBootstrapButtons.fire({
+        axios({
+          method:"DELETE",
+          url:`https://jsonplaceholder.typicode.com/posts/${itemId}`
+        }).then(res=>{
+          if(res.status==200){
+          const newUsers=users.filter(u=>u.id != itemId)
+          setUsers(newUsers)
+          swalWithBootstrapButtons.fire({
           title: "Deleted!",
           text: "Your file has been deleted.",
           icon: "success"
-        });
-      } else if (
-        /* Read more about handling dismissals below */
+        })
+          }
+          else{
+            Swal("system has crashed"),{
+              icon:"error",
+              button :`ok ${className="bg-black rounded-sm  p-3 text-white"}`
+            }
+          }
+        })
+      } 
+      else if (
         result.dismiss === Swal.DismissReason.cancel
       ) {
         swalWithBootstrapButtons.fire({
@@ -89,9 +105,9 @@ const Users = () => {
         </thead>
         <tbody>
           {users.map(u=>(
-            <tr className="divide-y">
+            <tr key={u.id} className="divide-y">
             <td>
-              <i onClick={() => handelDelete(1)} className="fas fa-trash text-red-600 mx-2 cursor-pointer"></i>
+              <i onClick={() => handelDelete(u.id)} className="fas fa-trash text-red-600 mx-2 cursor-pointer"></i>
               <i onClick={() => Navigate("/users/add/2", { state: "react" })} className="fas fa-edit text-yellow-500 mx-2 cursor-pointer"></i>
             </td>
             <td>{u.email}</td>
