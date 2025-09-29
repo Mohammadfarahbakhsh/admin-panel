@@ -1,8 +1,15 @@
 
+import Swal from "sweetalert2";
 
 const NoneButton=()=>{
     const handleClick=()=>{
-        alert("ویرایشتو بکن")
+    Swal.fire({
+        title: '<span class="font-bold">welcome</span>',
+        customClass: {
+        confirmButton: "bg-black rounded-sm  p-3 text-white",
+      },
+      buttonsStyling: false
+    });
     }
     return(
         <div className="flex flex-col mt-[20vh]">

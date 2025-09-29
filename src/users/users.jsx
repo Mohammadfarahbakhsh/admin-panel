@@ -1,16 +1,18 @@
 import { Link, useNavigate } from "react-router-dom";
 import style from "../style.module.css";
-import  Axios  from "axios";
 import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { jpAxios } from "../JpAxios";
 
 const Users = () => {
   const [users,setUsers]=useState([])
+  const [mainUsers,setMainUsers]=useState([])
   const Navigate = useNavigate()
   useEffect(() => {
-    Axios.get('https://jsonplaceholder.typicode.com/users').then(res=>{
+    jpAxios.get('/users').then(res=>{
       setUsers(res.data)
+      setMainUsers(res.data)
+      
     }).catch(err=>{
       console.log(err);
     })
@@ -22,8 +24,8 @@ const Users = () => {
   const handelDelete = (itemId) => {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
-        confirmButton: "bg-black rounded-sm  p-3 text-white ml-[2vh]",
-        cancelButton: "bg-red-600 rounded-sm  p-3 text-white"
+        confirmButton: "bg-black rounded-sm  p-3 text-white",
+        cancelButton: "bg-red-600 rounded-sm mr-[2vh]  p-3 text-white"
       },
       buttonsStyling: false
     });
@@ -36,9 +38,9 @@ const Users = () => {
       reverseButtons: true
     }).then((result) => {
       if (result.isConfirmed) {
-        axios({
+        jpAxios({
           method:"DELETE",
-          url:`https://jsonplaceholder.typicode.com/posts/${itemId}`
+          url:`/posts/${itemId}`
         }).then(res=>{
           if(res.status==200){
           const newUsers=users.filter(u=>u.id != itemId)
@@ -68,6 +70,9 @@ const Users = () => {
       }
     });
   }
+  const handelSearch=(e)=>{
+    setUsers(mainUsers.filter(c=>c.name.include(e.target.value)))
+  }
   return (
     <div className={`${style.item_content} mt-5 p-4 w-full max-w-none`}>
       <h4 className="text-center">مدریت کاربران</h4>
@@ -86,6 +91,7 @@ const Users = () => {
         {/* اینپوت سرچ */}
         <div className="w-full sm:w-1/2 md:w-1/3">
           <input
+            onChange={handelSearch}
             placeholder="جستوجو"
             type="text"
             className="block w-full text-right rounded-md border border-black px-3 py-2 focus:ring-2 focus:ring-black focus:ring-opacity-50"
@@ -108,7 +114,7 @@ const Users = () => {
             <tr key={u.id} className="divide-y">
             <td>
               <i onClick={() => handelDelete(u.id)} className="fas fa-trash text-red-600 mx-2 cursor-pointer"></i>
-              <i onClick={() => Navigate("/users/add/2", { state: "react" })} className="fas fa-edit text-yellow-500 mx-2 cursor-pointer"></i>
+              <i onClick={() => Navigate(`/users/add/${u.id}`, { state: "react" })} className="fas fa-edit text-yellow-500 mx-2 cursor-pointer"></i>
             </td>
             <td>{u.email}</td>
             <td>{u.username}</td>

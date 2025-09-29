@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { Link, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
+import { useState,useEffect } from "react";
+import { data, Link, Outlet, useLocation, useNavigate, useParams } from "react-router-dom";
+import { setUserService,updateUserService } from "../services/UserService";
+import { jpAxios } from "../JpAxios";
 const AddUser = () => {
     const {userId} = useParams()
-    const param=useLocation()
-    console.log(param);
+    const navigate=useNavigate()
     const [data,setData]=useState({
       name:"",
       email:"",
@@ -14,18 +14,27 @@ const AddUser = () => {
         city:"",
         suite:"",
         zipcode:""
-      }
-    })
-
+      }})
     const handelAddUser=(e)=>{
       e.preventDefault()
-      axios.post("https://jsonplaceholder.typicode.com/users",data).then(res=>{
-        console.log(res);
-        
-      })
+      if(!userId){
+        setUserService(data)
+      }else{
+        updateUserService(data,userId)
+      }
     }
-    
-    const navigate=useNavigate()
+    useEffect(() => {
+      jpAxios.get(`/users/${userId}`).then(res=>{
+        setData({
+      name:res.data.name,
+      email:res.data.email,
+      username:res.data.username,
+      address:{
+        street:res.data.address.street,
+        city:res.data.address.city,
+        suite:res.data.address.suite,
+        zipcode:res.data.address.zipcode
+      }})})},);
   return (
     <div className="mt-5 p-4 w-full">
       <h4 className="text-center text-black text-3xl">
@@ -69,6 +78,6 @@ const AddUser = () => {
       <Outlet/>
     </div>
   );
-};
+}
 
 export default AddUser;
