@@ -1,0 +1,45 @@
+import Swal from "sweetalert2";
+
+const withAlert = (MainComponent) => {
+  const NewComponent = (props) => {
+    // استایل دکمه‌ها
+    // const swalWithBootstrapButtons = Swal.mixin({
+    //   customClass: {
+    //     confirmButton: "bg-black rounded-sm px-4 py-2 text-white mx-2",
+    //     cancelButton: "bg-red-600 rounded-sm px-4 py-2 text-white mx-2",
+    //   },
+    //   buttonsStyling: false,
+    // });
+
+    // const Confirm = async (message) => {
+    //   const result = await swalWithBootstrapButtons.fire({
+    //     title: message,
+    //     icon: "warning",
+    //     showCancelButton: true,
+    //     confirmButtonText: "بله، حذف شود",
+    //     cancelButtonText: "خیر",
+    //     reverseButtons: true,
+    //   });
+    //   return result.isConfirmed;
+    // };
+    // const Alert =(message,icon)=>{
+    //               Swal.fire({
+    //                 title: "حذف شد!",
+    //                 text:message,
+    //                 icon: icon,
+    //                 confirmButtonText: "باشه",
+    //                 customClass: {
+    //                   confirmButton: "bg-black rounded-sm px-4 py-2 text-white",
+    //                 },
+    //               });
+    // }
+
+
+
+    return <MainComponent {...props} Confirm={Confirm} Alert={Alert}/>;
+  };
+
+  return NewComponent;
+};
+
+export default withAlert;
