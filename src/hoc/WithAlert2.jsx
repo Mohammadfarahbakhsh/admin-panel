@@ -55,7 +55,7 @@ const WithAlert2=(props)=>{
         }
     return(
         <>
-        {props.render(Confirm,Alert,Error,Cancel)}
+        {props.children(Confirm,Alert,Error,Cancel)}
         </>
     )
 }
