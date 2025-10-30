@@ -8,7 +8,8 @@ import { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import AddUser from "./users/AddUser";
 import NoneButton from "./users/NoneButton";
-import WithAlert2 from "../src/hoc/WithAlert2";
+import WithAlert2 from "./hoc/withalert2";
+import AddPost from "./posts/AddPost2";
 const Content = () => {
   const {showMenu, setShowMenu} = useContext(MainContext)
   const handleShowMenu = (event) => {
@@ -26,7 +27,12 @@ const Content = () => {
             <Route path="/users/add" element={<AddUser/>}>
             <Route path=":userId" element={<NoneButton/>}/>
             </Route>
-            <Route path="/Posts" element={<Posts />}/>
+
+              <Route path="/posts" element={<Posts/>} />
+              <Route path="/post/add" element={<AddPost/>}>
+              <Route path=":postId"/>
+              </Route>
+
             <Route path="/Gallery" element={<Gallery />}/>
             <Route path="/Todos" element={<Todos/>}/>
             <Route path="*" element={<WithAlert2>
