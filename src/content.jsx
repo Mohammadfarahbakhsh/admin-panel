@@ -18,6 +18,7 @@ const Content = () => {
   };
   const renderUsers=(Confirm,Alert,Cancel,Error)=> <Users Cancel={Cancel} Error={Error} Confirm={Confirm} Alert={Alert}/>
   const renderPosts=(Confirm,Alert,Cancel,Error)=> <Posts Cancel={Cancel} Error={Error} Confirm={Confirm} Alert={Alert}/>
+  const renderGallery=(Confirm,Alert,Cancel,Error)=> <Gallery Cancel={Cancel} Error={Error} Confirm={Confirm} Alert={Alert}/>
   
   return (
     <div onClick={() => {setShowMenu(false)}} className={`${style.content_section} `}>
@@ -35,7 +36,7 @@ const Content = () => {
               <Route path=":postId"/>
               </Route>
 
-            <Route path="/Gallery" element={<Gallery />}/>
+            <Route path="/Gallery" element={<WithAlert2>{renderGallery}</WithAlert2>}/>
             <Route path="/Todos" element={<Todos/>}/>
             <Route path="*" element={<WithAlert2>
               {renderUsers}

@@ -1,9 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import style from "../style.module.css";
-import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { jpAxios } from "../JpAxios";
-import withAlert from "../hoc/withalert";
 import useTitle from "../hooks/useTitle";
 
 const Users = (props) => {
