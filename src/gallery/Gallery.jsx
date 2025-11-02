@@ -14,9 +14,12 @@ const Gallery = (props) => {
       
     })
   }, []);
-
+  const searchAlbums=(e)=>{
+    const photo=e.target.value.toString()
+    setAlbums(albums.filter((c)=>c.id.toString().includes(photo)) )
+  }
   const deleteGallery=async(itemId)=>{
-    const isConfirmed = await Confirm(`آیا از حذف کاربر ${itemId} اطمینان دارید؟`);
+    const isConfirmed = await Confirm(`آیا از حذف البوم ${itemId} اطمینان دارید؟`);
     if (isConfirmed) {
       try {
         const res = await jpAxios.delete(`/albums/${itemId}`);
@@ -29,7 +32,7 @@ const Gallery = (props) => {
 
         }
       } catch (error) {
-        Error("در حذف کاربر خطایی رخ داد","Error")
+        Error("در حذف البوم خطایی رخ داد","Error")
       }
     } else {
       Cancel("عملیات حذف لغو شد","error")
@@ -44,7 +47,8 @@ const Gallery = (props) => {
     {/* جست‌وجو */}
     <div className="max-w-md mx-auto mb-6">
       <input
-        type="text"
+        onChange={(id)=>searchAlbums(id)}
+        type="number"
         placeholder="جست‌وجوی عکس..."
         className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-black outline-none"
       />
@@ -59,7 +63,7 @@ const Gallery = (props) => {
           className="bg-white shadow rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-200"
         >
           <img
-          src={`https://picsum.photos/300/200?random=/${u.id}`}
+          src={`https://picsum.photos/300/200?random=${u.id}`}
             className="w-full h-48 object-cover"
           />
           <div className="p-4 flex flex-col gap-2">
