@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import style from "../style.module.css";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { getPostService } from "../services/postService";
-const Posts = () => {
-  const Navigate=useNavigate()
+import useTitle from "../hooks/useTitle";
+import { jpAxios } from "../JpAxios";
+
+const Posts = (props) => {
+  const { Confirm , Alert, Cancel, Error} = props; 
+  const navigate=useNavigate()
   const [posts,setPosts]=useState([]) 
   const [mainPosts,setMainPosts]=useState([])
   const [uId,setUId]=useState("")
@@ -11,9 +15,27 @@ const Posts = () => {
     if(uId>0) setPosts(mainPosts.filter(e=>e.userId==uId))
     else setPosts(mainPosts)
   }
-  const handelDelete=(postId)=>{
+  const handelDelete = async (itemId) => {
+    console.log(itemId);
+    
+    const isConfirmed = await Confirm(`آیا از حذف کاربر ${itemId} اطمینان دارید؟`);
+    if (isConfirmed) {
+      try {
+        const res = await jpAxios.delete(`/posts/${itemId}`);
+        if (res.status === 200) {
+          const newPosts = posts.filter((u) => u.id !== itemId);
+          setPosts(newPosts);
 
-  }
+          Alert("کاربر با موفقیت حذف شد","success")
+
+        }
+      } catch (error) {
+        Error("در حذف کاربر خطایی رخ داد","Error")
+      }
+    } else {
+      Cancel("عملیات حذف لغو شد","error")
+    }
+  };
   const getPosts=async()=>{
     const res=await getPostService();
     setPosts(res.data)
@@ -26,7 +48,7 @@ const Posts = () => {
   useEffect(() => {
     handelSearch()
   }, [uId]);
-
+  useTitle("posts")
 
   return (
     <div className={`${style.item_content} mt-5 p-4 w-full `}>
@@ -72,7 +94,7 @@ const Posts = () => {
                     onClick={() => handelDelete(u.id)}
                     className="fas fa-trash text-red-600 mx-2 cursor-pointer"
                   ></i>
-                  <i onClick={() =>Navigate(`/post/add/${u.id}`, { state: "react" })
+                  <i onClick={() =>navigate(`/post/add/${u.id}`, { state: "react" })
                     }
                     className="fas fa-edit text-yellow-500 mx-2 cursor-pointer"
                   ></i>

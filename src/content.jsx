@@ -17,6 +17,8 @@ const Content = () => {
     setShowMenu(!showMenu)
   };
   const renderUsers=(Confirm,Alert,Cancel,Error)=> <Users Cancel={Cancel} Error={Error} Confirm={Confirm} Alert={Alert}/>
+  const renderPosts=(Confirm,Alert,Cancel,Error)=> <Posts Cancel={Cancel} Error={Error} Confirm={Confirm} Alert={Alert}/>
+  
   return (
     <div onClick={() => {setShowMenu(false)}} className={`${style.content_section} `}>
       <i onClick={handleShowMenu} className={`${style.menu_button} visible md:invisible fas fa-bars text-gray-800 m-2 cursor-pointer`}></i>
@@ -28,7 +30,7 @@ const Content = () => {
             <Route path=":userId" element={<NoneButton/>}/>
             </Route>
 
-              <Route path="/posts" element={<Posts/>} />
+              <Route path="/posts" element={<WithAlert2>{renderPosts}</WithAlert2>} />
               <Route path="/post/add" element={<AddPost/>}>
               <Route path=":postId"/>
               </Route>

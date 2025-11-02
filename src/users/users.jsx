@@ -4,6 +4,7 @@ import Swal from "sweetalert2";
 import { useEffect, useState } from "react";
 import { jpAxios } from "../JpAxios";
 import withAlert from "../hoc/withalert";
+import useTitle from "../hooks/useTitle";
 
 const Users = (props) => {
   const [users, setUsers] = useState([]);
@@ -22,6 +23,7 @@ const Users = (props) => {
         console.log(err);
       });
   }, []);
+  useTitle("users")
 
   const handelDelete = async (itemId) => {
 
