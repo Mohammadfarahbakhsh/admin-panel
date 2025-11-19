@@ -37,9 +37,11 @@ const Content = () => {
               </Route>
 
             <Route path="/Gallery" element={<WithAlert2>{renderGallery}</WithAlert2>}/>
+
+
+
             <Route path="/Todos" element={<Todos/>}/>
-            <Route path=":userId" />
-            <Route/>
+
             <Route path="*" element={<WithAlert2>
               {renderUsers}
             </WithAlert2>}/>

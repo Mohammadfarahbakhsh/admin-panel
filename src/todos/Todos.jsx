@@ -6,27 +6,19 @@ import { useParams } from "react-router-dom";
 
 
 const Todos = () => {
-  const{userId}=useParams()
   useTitle("Todos")
   const [todos,setTodos]=useState([])
-  const [data,setData]=useState({
-   title:"",
-   completed:Boolean
-  })
+
   useEffect(() => {
-    jpAxios.get(`/todos/${userId}`).then((res)=>{
+    jpAxios.get(`/todos`).then((res)=>{
       setTodos(res.data)
-      setData({
-        title:res.data.title,
-        completed:res.data.completed
-      })
     }).catch(err=>{
       console.log(err);
       
     });
   }, []);
   const deleteTodo=async(itemId)=>{
-    const Delete=await jpAxios.delete(`todos/${itemId}`)
+    const Delete=await jpAxios.delete(`/todos/${itemId}`)
     if(Delete.status==200){
       const newTodo=todos.filter((u)=>u.id!==itemId)
       setTodos(newTodo)
@@ -51,15 +43,14 @@ const Todos = () => {
     {todos.map((u)=>(
       <li key={u.id} className="flex items-start gap-3 p-3 rounded-xl border border-gray-100 hover:shadow-sm transition-shadow bg-white">
       <div className="flex-shrink-0 mt-0.5">
-      <div className="w-5 h-5 rounded-md border-2 border-gray-300 flex items-center justify-center"></div>
       </div>
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-gray-900 truncate">Todo Title</p>
+          <p className="text-sm font-medium text-gray-900 truncate">{u.title}</p>
         </div>
         <p className="mt-1 text-xs text-gray-500">
-          وضعیت: <span className="font-medium text-gray-700">Incomplete</span>
+          وضعیت: <span className="font-medium text-gray-700">{u.completed?"done":"inCompleted"}</span>
         </p>
       </div>
 
@@ -86,7 +77,7 @@ const Todos = () => {
           </svg>
         </button>
 
-        <button onClick={()=>deleteTodo()} className="p-2 rounded-md hover:bg-gray-100">
+        <button onClick={()=>deleteTodo(u.id)} className="p-2 rounded-md hover:bg-gray-100">
           <svg
             className="w-4 h-4 text-red-500"
             fill="none"
