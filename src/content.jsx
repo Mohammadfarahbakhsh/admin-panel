@@ -8,7 +8,7 @@ import { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import AddUser from "./users/AddUser";
 import NoneButton from "./users/NoneButton";
-import WithAlert2 from "./hoc/withalert2";
+import WithAlert2 from "./hoc/withAlert2";
 import AddPost from "./posts/AddPost2";
 const Content = () => {
   const {showMenu, setShowMenu} = useContext(MainContext)
