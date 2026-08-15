@@ -1,6 +1,6 @@
 import Swal from "sweetalert2";
 
-const withAlert = (MainComponent) => {
+const WithAlert = (MainComponent) => {
   const NewComponent = (props) => {
     // استایل دکمه‌ها
     // const swalWithBootstrapButtons = Swal.mixin({
@@ -42,4 +42,4 @@ const withAlert = (MainComponent) => {
   return NewComponent;
 };
 
-export default withAlert;
+export default WithAlert;
